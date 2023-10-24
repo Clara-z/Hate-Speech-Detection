@@ -1,9 +1,15 @@
 # Hate Speech Detection
 
+# Introduction
+fdhkfdkjskdfkf
+
+fdhkfhdk
+dfhkdfk
+
 ## Introduction
 Online hate speech has seen a surge in recent years, leading to real-world consequences such as mental health issues and the perpetuation of discrimination and violence. This project aims to mitigate the proliferation of hate speech on social media platforms by automatically detecting such language. We focus on identifying hate speech using a dynamically generated dataset and employ various machine learning models to classify input documents as either hate speech or not.
 
-# Introduction
+
 
 ## Table of Contents
 - [Introduction](#introduction)
