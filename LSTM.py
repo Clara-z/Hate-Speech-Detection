@@ -80,7 +80,7 @@ for lstm_units in lstm_units_options:
 
         # Create and train the model
         lstm_model = create_lstm_model(lstm_units, dropout_rate)
-        lstm_model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), callbacks=[early_stopping], verbose=1)
+        lstm_model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), steps_per_epoch=300, callbacks=[early_stopping], verbose=1)
 
         # Evaluate the model
         val_accuracy = lstm_model.evaluate(dev_sequences, dev_labels, verbose=1)[1]
