@@ -49,5 +49,5 @@ prediction_word = ['hate_speech' if p == 1 else 'non_hate_speech' for p in predi
 labels_word = ['hate_speech' if l == 1 else 'non_hate_speech' for l in labels]
 
 # print the confusion matrix and the metrics
-util.plot_confusion_matrix(prediction_word, labels_word)
+util.plot_confusion_matrix(prediction_word, labels_word, labels=['hate_speech', 'non_hate_speech'])
 util.print_metrics(prediction_word, labels_word, average='binary', pos_label='hate_speech')

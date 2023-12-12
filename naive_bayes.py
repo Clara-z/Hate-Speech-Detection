@@ -3,11 +3,11 @@ import numpy as np
 import pandas as pd
 import util
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import classification_report, accuracy_score
-from sklearn.metrics import confusion_matrix
 from scipy.sparse import vstack
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 # Load the data
 train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
@@ -63,13 +63,9 @@ best_dev_accuracy = alpha_scores[best_index]
 
 print(f"\nBest alpha value: {best_alpha} with Dev Accuracy: {best_dev_accuracy:.4f}\n")
 
-# Concatenate the training and development sets
-X_train_final = vstack([X_train, X_dev])
-y_train_final = np.concatenate([y_train, y_dev])
-
-# Train a new classifier using the best alpha on the combined training and development sets
+# Train the model with the best alpha on the training set
 nb_classifier_best = MultinomialNB(alpha=best_alpha)
-nb_classifier_best.fit(X_train_final, y_train_final)
+nb_classifier_best.fit(X_train, y_train)
 
 # Predict on the test set
 y_test_pred = nb_classifier_best.predict(X_test)
