@@ -41,7 +41,7 @@ def majority_rule(train_data):
         return 0
 
 # Use majority rule to determine the label of each tweet
-label = majority_rule(test_data)
+label = majority_rule(train_data)
 
 # our prediction to the test set is the majority rule
 prediction = np.array([label] * len(test_data))
@@ -49,10 +49,10 @@ prediction = np.array([label] * len(test_data))
 # get the labels of the test set
 labels = test_data[:, 2]
 
-# check if prediction and labels are all binary values
-assert set(prediction) == {0, 1}
+# Convert prediction and labels' 1, 0 to 'hate_speech', 'non_hate_speech', respectively
+# We do this because the confusion matrix does not accept prediction 1 (nonbinary) and labels 0,1 binary.
+prediction = ['hate_speech' if p == 1 else 'non_hate_speech' for p in prediction]
+labels = ['hate_speech' if l == 1 else 'non_hate_speech' for l in labels]
 
 # print the confusion matrix and the metrics
-util.plot_confusion_matrix(prediction, labels)
-util.print_metrics(prediction, labels)
-
+util.eval(prediction, labels)
