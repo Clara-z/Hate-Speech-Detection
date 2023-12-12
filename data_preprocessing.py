@@ -41,6 +41,9 @@ def split_data(input_file, output_train_file, output_dev_file, output_test_file)
     """
     # read the data from the .npy file
     data = np.load(input_file, allow_pickle=True)
+    # change 'hate' to 1 and 'nothate' to 0
+    data[data[:, 2] == 'hate', 2] = 1
+    data[data[:, 2] == 'nothate', 2] = 0
     # split the data into training set, dev set, and test set
     train_data, test_data = train_test_split(data, test_size=0.2, random_state=42)
     train_data, dev_data = train_test_split(train_data, test_size=0.125, random_state=42)
@@ -54,3 +57,5 @@ if __name__ == "__main__":
     cols_kept = ['text', 'label']
     store_data('data/dynamically-generated-hate-speech.csv', cols_kept,'data/hate_speech.npy')
     split_data('data/hate_speech.npy', 'data/hate_speech_train.npy', 'data/hate_speech_dev.npy', 'data/hate_speech_test.npy')
+
+    print(np.load('data/hate_speech_train.npy', allow_pickle=True))
