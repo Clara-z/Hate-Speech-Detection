@@ -39,9 +39,9 @@ def create_bert_model():
     return model
 
 # Loading training, development, and test data from numpy files
-train_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_train.npy', allow_pickle=True)
-dev_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_dev.npy', allow_pickle=True)
-test_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_test.npy', allow_pickle=True)
+train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
+dev_data = np.load('data/hate_speech_dev.npy', allow_pickle=True)
+test_data = np.load('data/hate_speech_test.npy', allow_pickle=True)
 
 # Initializing the BERT tokenizer
 tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
