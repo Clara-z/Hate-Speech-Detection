@@ -19,7 +19,7 @@ def plot_confusion_matrix(y_pred, y_test):
 # Return the accuracy, precision, recall, and F1 score of the model prediction on the test set
 # Input: model prediction on the test set, and the ground truth
 # Output: accuracy, precision, recall, and F1 score
-def get_metrics(y_pred, y_test):
+def get_metrics(y_pred, y_test, average='binary', pos_label=1):
     """
     Return the accuracy, precision, recall, and F1 score of the model prediction on the test set.
     
@@ -30,12 +30,12 @@ def get_metrics(y_pred, y_test):
         accuracy, precision, recall, and F1 score
     """
     accuracy = accuracy_score(y_test, y_pred)
-    precision = precision_score(y_test, y_pred, average='binary', pos_label='hate_speech')
-    recall = recall_score(y_test, y_pred, average='binary', pos_label='hate_speech')
-    f1 = f1_score(y_test, y_pred, average='binary', pos_label='hate_speech')
+    precision = precision_score(y_test, y_pred, average=average, pos_label=pos_label)
+    recall = recall_score(y_test, y_pred, average=average, pos_label=pos_label)
+    f1 = f1_score(y_test, y_pred, average=average, pos_label=pos_label)
     return accuracy, precision, recall, f1
 
-def print_metrics(y_pred, y_test):
+def print_metrics(y_pred, y_test, average='binary', pos_label=1):
     """
     Print the accuracy, precision, recall, and F1 score of the model prediction on the test set.
     
@@ -45,7 +45,7 @@ def print_metrics(y_pred, y_test):
         recall: recall
         f1: F1 score
     """
-    accuracy, precision, recall, f1 = get_metrics(y_pred, y_test)
+    accuracy, precision, recall, f1 = get_metrics(y_pred, y_test, average=average, pos_label=pos_label)
     print('Accuracy: ', accuracy)
     print('Precision: ', precision)
     print('Recall: ', recall)

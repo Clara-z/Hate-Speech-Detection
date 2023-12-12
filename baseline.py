@@ -1,12 +1,6 @@
 import numpy as np
 import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-import warnings
 import util
-
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
 
 # train data is from hate_speech_train.npy
 train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
@@ -51,8 +45,9 @@ labels = test_data[:, 2]
 
 # Convert prediction and labels' 1, 0 to 'hate_speech', 'non_hate_speech', respectively
 # We do this because the confusion matrix does not accept prediction 1 (nonbinary) and labels 0,1 binary.
-prediction = ['hate_speech' if p == 1 else 'non_hate_speech' for p in prediction]
-labels = ['hate_speech' if l == 1 else 'non_hate_speech' for l in labels]
+prediction_word = ['hate_speech' if p == 1 else 'non_hate_speech' for p in prediction]
+labels_word = ['hate_speech' if l == 1 else 'non_hate_speech' for l in labels]
 
 # print the confusion matrix and the metrics
-util.eval(prediction, labels)
+util.plot_confusion_matrix(prediction_word, labels_word)
+util.print_metrics(prediction_word, labels_word, average='binary', pos_label='hate_speech')
