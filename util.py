@@ -3,39 +3,16 @@ import matplotlib.pyplot as plt
 import itertools
 from sklearn.metrics import confusion_matrix, accuracy_score, precision_score, recall_score, f1_score
 
-# Given a model prediction on the test set (np), plot the confusion matrix showing the difference between prediction and the ground truth
-# Input: model prediction on the test set
-# Output: confusion matrix
-def plot_confusion_matrix(np, classes, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
-    """
-    Given a model prediction on the test set (np), plot the confusion matrix showing the difference between prediction and the ground truth.
-    
-    Args:
-        np: model prediction on the test set
-        classes: classes
-        normalize: normalize
-        title: title
-        cmap: cmap
-    """
-    cm = confusion_matrix(np, classes)
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize=(10, 10))
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.title(title, fontsize=20)
-    plt.colorbar()
-    tick_marks = np.arange(len(classes))
-    plt.xticks(tick_marks, classes, fontsize=20)
-    plt.yticks(tick_marks, classes, fontsize=20)
-    fmt = '.2f' if normalize else 'd'
-    thresh = cm.max() / 2.
-    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-            plt.text(j, i, format(cm[i, j], fmt), fontsize=20,
-                     horizontalalignment="center",
-                     color="white" if cm[i, j] > thresh else "black")
-    plt.tight_layout()
-    plt.ylabel('True label', fontsize=20)
-    plt.xlabel('Predicted label', fontsize=20)
+# Given a model prediction on the test set, plot the confusion matrix showing the difference between prediction and the ground truth
+def plot_confusion_matrix(y_pred, y_test):
+    # Generate Confusion Matrix
+    cm = confusion_matrix(y_test, y_pred, labels=[1,0])
+    cm_transposed = cm.T
+    display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=['Hate', 'Not Hate'])
+    display.plot(cmap='Blues')
+    plt.xlabel('Actual label')
+    plt.ylabel('Predict label')
+
     plt.show()
 
 # Return the accuracy, precision, recall, and F1 score of the model prediction on the test set

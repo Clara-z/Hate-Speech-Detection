@@ -10,6 +10,11 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 
 # train data is from hate_speech_train.npy
 train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
+# dev data is from hate_speech_dev.npy
+dev_data = np.load('data/hate_speech_dev.npy', allow_pickle=True)
+# test data is from hate_speech_test.npy
+test_data = np.load('data/hate_speech_test.npy', allow_pickle=True)
+
 # learn a policy from the training data, using majority rule
 # Input: training data
 # Output: a value indicating whether the majority of the tweets in the training data are hate speech or not
@@ -25,20 +30,29 @@ def majority_rule(train_data):
     # get the labels of the training data
     labels = train_data[:, 2]
     # get the number of hate speech tweets in the training data
-    num_hate_speech = np.sum(labels == 'hate_speech')
+    num_hate_speech = np.sum(labels == 1)
     # get the number of non hate speech tweets in the training data
-    num_non_hate_speech = np.sum(labels == 'non_hate_speech')
+    num_non_hate_speech = np.sum(labels == 0)
     # if the number of hate speech tweets is greater than the number of non hate speech tweets, return 'hate_speech'
     if num_hate_speech > num_non_hate_speech:
-        return 'hate_speech'
+        return 1
     # otherwise, return 'non_hate_speech'
     else:
-        return 'non_hate_speech'
+        return 0
 
 # Use majority rule to determine the label of each tweet
-labels = majority_rule(test_data)
+label = majority_rule(test_data)
 
-# Result
-util.plot_confusion_matrix(labels, test_data[:, 2], normalize=True, title='Confusion matrix')
-util.print_metrics(labels, test_data[:, 2])
+# our prediction to the test set is the majority rule
+prediction = np.array([label] * len(test_data))
+
+# get the labels of the test set
+labels = test_data[:, 2]
+
+# check if prediction and labels are all binary values
+assert set(prediction) == {0, 1}
+
+# print the confusion matrix and the metrics
+util.plot_confusion_matrix(prediction, labels)
+util.print_metrics(prediction, labels)
 
