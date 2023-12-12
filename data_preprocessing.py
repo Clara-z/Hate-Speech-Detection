@@ -1,6 +1,6 @@
 # store data (which is in .csv format) into a .npy file
 # Input: data in .csv format
-# Proces data, only keep some columns, and store the data into a .npy file
+# Process data (change 'hate' to 1 and 'nothate' to 0), only keep some columns, and store the data into a .npy file
 # Output: data in .npy format
 
 import numpy as np
