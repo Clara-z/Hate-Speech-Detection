@@ -76,20 +76,5 @@ print("Test Accuracy:", test_accuracy)
 classification_rep = classification_report(y_test, y_test_pred)
 print("Classification Report on Test Set:\n", classification_rep)
 
-# # Plot the confusion matrix for the test set (from scratch)
-# cm = confusion_matrix(y_test, y_test_pred)
-# display = ConfusionMatrixDisplay(confusion_matrix=cm)
-# display.plot(cmap='Blues')
-# plt.show()
-
-# # Generate Confusion Matrix
-# cm = confusion_matrix(y_test, y_test_pred, labels=[1, 0])  # 0 for 'not hate', 1 for 'hate'
-# cm_transposed = cm.T
-# display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=['Hate', 'Not Hate'])
-# display.plot(cmap='Blues')
-# plt.xlabel('Actual label')
-# plt.ylabel('Predict label')
-# plt.show()
-
 # Call util.eval to plot the confusion matrix (assuming util.eval does this)
 util.eval(y_test_pred, y_test)
