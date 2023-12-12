@@ -38,7 +38,7 @@ def create_lstm_model(lstm_units, dropout_rate):
     model.add(Embedding(5000, 64, input_length=200))
     model.add(LSTM(lstm_units, dropout=dropout_rate, recurrent_dropout=dropout_rate))
     model.add(Dense(1, activation='sigmoid'))
-
+    
     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
     return model
 
@@ -65,6 +65,8 @@ test_data = np.load('data/hate_speech_test.npy', allow_pickle=True)
 # rnn_model = create_lstm_model()
 # rnn_model = train_lstm_model(rnn_model, train_data, dev_data)
 
+early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
+
 best_val_accuracy = 0
 best_lstm_units = 0
 best_dropout_rate = 0
@@ -78,7 +80,7 @@ for lstm_units in lstm_units_options:
 
         # Create and train the model
         lstm_model = create_lstm_model(lstm_units, dropout_rate)
-        lstm_model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), verbose=1)
+        lstm_model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), callbacks=[early_stopping], verbose=1)
 
         # Evaluate the model
         val_accuracy = lstm_model.evaluate(dev_sequences, dev_labels, verbose=1)[1]
