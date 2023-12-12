@@ -4,15 +4,29 @@ import itertools
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_score, precision_score, recall_score, f1_score
 
 # Given a model prediction on the test set, plot the confusion matrix showing the difference between prediction and the ground truth
-def plot_confusion_matrix(y_pred, y_test):
-    # Generate Confusion Matrix
-    cm = confusion_matrix(y_test, y_pred)
+def plot_confusion_matrix(y_pred, y_test, labels=[1, 0]):
+    # Assuming y_test are the true labels, and y_test_pred are the predicted labels from your model
+    # Calculate the confusion matrix and specify the order of labels to match your desired output
+    cm = confusion_matrix(y_test, y_pred, labels=labels)
+
+    # Transpose the confusion matrix to swap the prediction (rows) and actual (columns)
     cm_transposed = cm.T
-    display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=['Hate', 'Not Hate'])
-    display.plot(cmap='Blues')
+
+    # Create a new ConfusionMatrixDisplay instance using the transposed matrix
+    # Note: We must manually specify the display labels to match the transposed order
+    display_labels = ['Not Hate', 'Hate']  # Note this is unconventional and may be confusing
+
+    # Create the confusion matrix display
+    display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=display_labels)
+
+    # Plot the confusion matrix
+    display.plot(cmap='Blues', values_format='g')
+
+    # Since we want the x-axis to be the actual labels, we'll set the xlabel to 'Actual label' and the ylabel to 'Predict label'
     plt.xlabel('Actual label')
     plt.ylabel('Predict label')
 
+    # Show the plot
     plt.show()
 
 

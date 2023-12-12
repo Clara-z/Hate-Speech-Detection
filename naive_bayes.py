@@ -3,11 +3,11 @@ import numpy as np
 import pandas as pd
 import util
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
-from sklearn.naive_bayes import MultinomialNB
-from sklearn.metrics import classification_report, accuracy_score
-from sklearn.metrics import confusion_matrix
 from scipy.sparse import vstack
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
 
 # Load the data
 train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
@@ -63,13 +63,9 @@ best_dev_accuracy = alpha_scores[best_index]
 
 print(f"\nBest alpha value: {best_alpha} with Dev Accuracy: {best_dev_accuracy:.4f}\n")
 
-# Concatenate the training and development sets
-X_train_final = vstack([X_train, X_dev])
-y_train_final = np.concatenate([y_train, y_dev])
-
-# Train a new classifier using the best alpha on the combined training and development sets
+# Train the model with the best alpha on the training set
 nb_classifier_best = MultinomialNB(alpha=best_alpha)
-nb_classifier_best.fit(X_train_final, y_train_final)
+nb_classifier_best.fit(X_train, y_train)
 
 # Predict on the test set
 y_test_pred = nb_classifier_best.predict(X_test)
@@ -79,6 +75,21 @@ print("Test Accuracy:", test_accuracy)
 # Generate and print classification report for the test set
 classification_rep = classification_report(y_test, y_test_pred)
 print("Classification Report on Test Set:\n", classification_rep)
+
+# # Plot the confusion matrix for the test set (from scratch)
+# cm = confusion_matrix(y_test, y_test_pred)
+# display = ConfusionMatrixDisplay(confusion_matrix=cm)
+# display.plot(cmap='Blues')
+# plt.show()
+
+# # Generate Confusion Matrix
+# cm = confusion_matrix(y_test, y_test_pred, labels=[1, 0])  # 0 for 'not hate', 1 for 'hate'
+# cm_transposed = cm.T
+# display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=['Hate', 'Not Hate'])
+# display.plot(cmap='Blues')
+# plt.xlabel('Actual label')
+# plt.ylabel('Predict label')
+# plt.show()
 
 # Call util.eval to plot the confusion matrix (assuming util.eval does this)
 util.eval(y_test_pred, y_test)
