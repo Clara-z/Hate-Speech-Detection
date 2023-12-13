@@ -7,17 +7,16 @@ from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay, accuracy_s
 def plot_confusion_matrix(y_pred, y_test, labels=[1, 0]):
     # Assuming y_test are the true labels, and y_test_pred are the predicted labels from your model
     # Calculate the confusion matrix and specify the order of labels to match your desired output
-    cm = confusion_matrix(y_test, y_pred, labels=labels)
-
-    # Transpose the confusion matrix to swap the prediction (rows) and actual (columns)
-    cm_transposed = cm.T
+    cm = confusion_matrix(y_pred, y_test, labels=labels)
 
     # Create a new ConfusionMatrixDisplay instance using the transposed matrix
     # Note: We must manually specify the display labels to match the transposed order
-    display_labels = ['Not Hate', 'Hate']  # Note this is unconventional and may be confusing
+    # Change the value in labels: from [1, 0] to ['Hate', 'Not Hate']
+    
+    display_labels = ['Hate', 'Not Hate']
 
     # Create the confusion matrix display
-    display = ConfusionMatrixDisplay(confusion_matrix=cm_transposed, display_labels=display_labels)
+    display = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=display_labels)
 
     # Plot the confusion matrix
     display.plot(cmap='Blues', values_format='g')
