@@ -10,8 +10,6 @@ from sklearn.metrics import classification_report, confusion_matrix
 
 
 # Hyperparameter grid
-lstm_units_options = [32, 64, 128]
-dropout_rate_options = [0.1, 0.2, 0.3, 0.4]
 
 
 def preprocess_data(data):
@@ -22,82 +20,42 @@ def preprocess_data(data):
     return padded_sequences, data[:, 2].astype(int)
 
 
-# Define the LSTM model without hyperparameter tuning
-# def create_lstm_model():
-#     model = Sequential()
-#     model.add(Embedding(5000, 64, input_length=200))
-#     model.add(LSTM(64, dropout=0.2, recurrent_dropout=0.2))
-#     model.add(Dense(1, activation='sigmoid'))
-
-#     model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-#     return model
-
-# Define the LSTM model with hyperparameter tuning
-def create_lstm_model(lstm_units, dropout_rate):
-    model = Sequential()
-    model.add(Embedding(5000, 64, input_length=200))
-    model.add(LSTM(lstm_units, dropout=dropout_rate, recurrent_dropout=dropout_rate))
-    model.add(Dense(1, activation='sigmoid'))
-    
-    model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
-    return model
-
-
-# def train_lstm_model(model, train_data, dev_data):
-#     train_sequences, train_labels = preprocess_data(train_data)
-#     dev_sequences, dev_labels = preprocess_data(dev_data)
-
-#     early_stopping = EarlyStopping(monitor='val_loss', patience=3)
-#     model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), callbacks=[early_stopping])
-#     return model
-
-
-
 # Load data
-# train data is from hate_speech_train.npy
 train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
-# dev data is from hate_speech_dev.npy
 dev_data = np.load('data/hate_speech_dev.npy', allow_pickle=True)
-# test data is from hate_speech_test.npy
 test_data = np.load('data/hate_speech_test.npy', allow_pickle=True)
 
-
-# rnn_model = create_lstm_model()
-# rnn_model = train_lstm_model(rnn_model, train_data, dev_data)
-
-early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weights=True)
-
-best_val_accuracy = 0
-best_lstm_units = 0
-best_dropout_rate = 0
-
+# Preprocess data
 train_sequences, train_labels = preprocess_data(train_data)
 dev_sequences, dev_labels = preprocess_data(dev_data)
-
-for lstm_units in lstm_units_options:
-    for dropout_rate in dropout_rate_options:
-        print(f"Training with {lstm_units} LSTM units and {dropout_rate} dropout rate")
-
-        # Create and train the model
-        lstm_model = create_lstm_model(lstm_units, dropout_rate)
-        lstm_model.fit(train_sequences, train_labels, epochs=10, validation_data=(dev_sequences, dev_labels), steps_per_epoch=300, callbacks=[early_stopping], verbose=1)
-
-        # Evaluate the model
-        val_accuracy = lstm_model.evaluate(dev_sequences, dev_labels, verbose=1)[1]
-
-        if val_accuracy > best_val_accuracy:
-            best_val_accuracy = val_accuracy
-            best_lstm_units = lstm_units
-            best_dropout_rate = dropout_rate
-
-        print(f"Validation accuracy: {val_accuracy}")
-
-print(f"Best LSTM units: {best_lstm_units}, Best Dropout rate: {best_dropout_rate}, Best Validation Accuracy: {best_val_accuracy}")
-
-
-# Preprocess test data and evaluate the model
 test_sequences, test_labels = preprocess_data(test_data)
-predictions = lstm_model.predict(test_sequences)
+
+
+# Define the LSTM model with best hyperparameters
+model = Sequential()
+model.add(Embedding(5000, 64, input_length=200))
+model.add(LSTM(64, dropout=0.1))  # Best hyperparameters
+model.add(Dense(1, activation='sigmoid'))
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
+
+# Train the model
+early_stopping = EarlyStopping(monitor='val_loss', patience=3)
+model.fit(train_sequences, train_labels, epochs=10, batch_size=32, validation_data=(dev_sequences, dev_labels), callbacks=[early_stopping], verbose=1)
+
+# Evaluate the model
+predictions = model.predict(test_sequences)
 predictions = (predictions > 0.5).astype(int)
 
 util.eval(predictions, test_labels)
+
+# Identifying misclassified samples
+misclassified_indices = np.where(predictions != test_labels.reshape(-1, 1))[0]
+
+# Randomly select 50 misclassified samples
+np.random.shuffle(misclassified_indices)
+selected_misclassified_indices = misclassified_indices[:50]
+
+# Outputting 50 misclassified samples
+print("50 Randomly Selected Misclassified Samples:")
+for index in selected_misclassified_indices:
+    print(f"Sample Index: {index}, text: {test_data[index][1]}, Predicted Label: {predictions[index][0]}, Actual Label: {test_labels[index]}")
