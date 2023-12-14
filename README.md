@@ -1,13 +1,15 @@
 # Hate Speech Detection
 
 ## Introduction
-Online hate speech has seen a surge in recent years, leading to real-world consequences such as mental health issues and the perpetuation of discrimination and violence. This project aims to mitigate the proliferation of hate speech on social media platforms by automatically detecting such language. We focus on identifying hate speech using a dynamically generated dataset and employ various machine learning models to classify input documents as either hate speech or not.
+The proliferation of hate speech on social media poses serious societal challenges, from mental health impacts to fostering discrimination and violence. Addressing this, our project aims to automate the detection of hate speech, utilizing a diverse dataset and advanced machine learning techniques. Our goal is to enhance online safety and inclusivity by accurately classifying texts as hate speech or non-hate speech.
 
 ## Table of Contents
 - [Introduction](#introduction)
+- [Requirements](#requirements)
 - [Related Work and Methodologies](#related-work-and-methodologies)
   - [Avoiding Overfitting](#avoiding-overfitting)
-  - [Contextualizing Hate Speech Classifiers](#contextualizing-hate-speech-classifiers)
+  - [Context-Aware Hate Speech Detection](#context-aware-hate-speech-detection)
+  - [Model Hyperparameter Optimization](#model-hyperparameter-optimization)
 - [Dataset and Evaluation](#dataset-and-evaluation)
   - [Dataset](#dataset)
   - [Dataset Split](#dataset-split)
@@ -15,31 +17,47 @@ Online hate speech has seen a surge in recent years, leading to real-world conse
 - [Methods](#methods)
   - [Baseline](#baseline)
   - [Naive Bayes](#naive-bayes)
-  - [Recurrent Neural Network (RNN)](#recurrent-neural-network)
-  - [Word2Vec](#word2vec)
   - [BERT](#bert)
+- [Results](#results-and-comparative-analysis)
+- [Conclusion](#conclusion)
 - [References](#references)
+
+## Requirements
+Clone the repository and install the required packages:
+```
+git clone https://github.com/Clara-z/CSCI467-final-project.git
+cd CSCI467-final-project
+pip install -r requirements.txt
+```
+Train and evaluate the model:
+```
+python baseline.py
+python naive_bayes.py
+python BERT.py
+```
 
 ## Related Work and Methodologies
 
 ### Avoiding Overfitting
-Overfitting in text classification models can lead to high performance on training data but poor generalization on unseen data. To address this:
-- **Regularization**: Dropout layers will be added to LSTM and RNN models to reduce overfitting.
-- **Cross-Validation**: K-fold cross-validation will be employed to ensure models generalize well to unseen data.
+Ensuring our models' robust performance on unseen data, we implemented the following strategies:
+- **Cross-Validation**: We utilized k-fold cross-validation, particularly in the Naive Bayes model, to enhance the model's ability to generalize across different data samples.
+- **Early Stopping**: In the BERT model, we incorporated an early stopping mechanism during training. This approach halts the training process if the model's performance on the validation set does not improve for a predetermined number of epochs, thus preventing overfitting.
 
-### Contextualizing Hate Speech Classifiers
-To enhance accuracy and reduce false positives, context-aware models are crucial. We will:
-- **Utilize BERT for Context Awareness**: Pre-training BERT on a large corpus will help in understanding the context of words, improving hate speech detection accuracy.
+### Context-Aware Hate Speech Detection
+Informed by the research of Kennedy et al. (2020) and Dixon et al. (2018), our approach emphasizes the crucial role of context in hate speech detection. Utilizing the advanced capabilities of BERT, known for its deep contextual analysis, we aim to capture the subtle and complex nuances of hate speech. This methodology aligns with the current best practices in the field, advocating for balanced datasets and context-aware models to ensure effective and unbiased detection of hate speech across various online platforms.
+
+### Model Hyperparameter Optimization
+In optimizing our BERT model, we utilized Weights & Biases (WandB) for hyperparameter tuning. WandB's capabilities in experiment tracking and hyperparameter space exploration greatly enhanced our model's performance. By systematically evaluating combinations of learning rates, optimizer types, and batch sizes, WandB helped identify the most effective settings for our model, leading to improved accuracy and efficiency in hate speech detection.
 
 ## Dataset and Evaluation
 
 ### Dataset
-We use Kaggle's "Dynamically Generated Hate Speech Dataset" with 40,463 samples, ensuring a balanced distribution of 54% hate speech and 46% non-hate.
+The project utilizes the "Dynamically Generated Hate Speech Dataset" from Kaggle, featuring 40,463 entries. This dataset is meticulously balanced, with a near-equal distribution of hate speech and non-hate categories.
 
 ### Dataset Split
-- **Training Set (80%)**: Used for model training.
+- **Training Set (70%)**: Used for model training.
 - **Development Set (10%)**: Used for model evaluation and tuning.
-- **Testing Set (10%)**: Provides an unbiased performance measure on unseen data.
+- **Testing Set (20%)**: Provides an unbiased performance measure on unseen data.
 
 ### Evaluation
 Metrics used for evaluation include:
@@ -51,19 +69,19 @@ Metrics used for evaluation include:
 ## Methods
 
 ### Baseline
-The Majority Classifier, which always predicts the most frequent label from the training dataset, serves as our baseline.
+Serving as a foundational comparison point, this model predicts the training dataset's most frequent label, regardless of input text.
 
 ### Naive Bayes
-A probabilistic framework based on Bayes' theorem, suitable for textual data classification.
-
-### Recurrent Neural Network (RNN)
-RNNs process sequences in text data, recognizing patterns and using past inputs to inform future predictions.
-
-### Word2Vec
-Generates dense vector embeddings to capture semantic nuances and offer richer context to machine learning models.
+This probabilistic model, based on Bayes’ theorem, is enhanced with TF-IDF vectorization and optimized through cross-validation and hyperparameter tuning, focusing on linguistic patterns in text classification.
 
 ### BERT
-A transformer-based model with bidirectional context understanding. We fine-tune BERT's pre-trained embeddings on our dataset for optimal results.
+BERT, with its deep learning architecture and contextual word understanding, represents a significant advancement in hate speech detection. We fine-tune BERT with a dense layer and optimize it using a Weights and Biases (WandB) system, ensuring robust performance in complex linguistic analysis.
+
+## Results and Comparative Analysis
+Our study reveals distinct performance variations among the Majority Classifier, Naive Bayes, and BERT models. BERT's superior performance highlights its advanced capabilities in contextual understanding, though it also encounters challenges with ambiguities and complex sentence structures.
+
+## Conclusion
+Our evaluation of various models, including Naive Bayes and BERT, underscores the significance of advanced models for effective hate speech detection. We propose future work focusing on data enrichment, fine-tuning sensitivity to subtleties, and hybrid modeling approaches for more refined hate speech detection systems.
 
 ## References
 - Usharengaraju2021: Dynamically generated hate speech dataset.
