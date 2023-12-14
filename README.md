@@ -84,6 +84,8 @@ Our study reveals distinct performance variations among the Majority Classifier,
 Our evaluation of various models, including Naive Bayes and BERT, underscores the significance of advanced models for effective hate speech detection. We propose future work focusing on data enrichment, fine-tuning sensitivity to subtleties, and hybrid modeling approaches for more refined hate speech detection systems.
 
 ## References
-- Usharengaraju2021: Dynamically generated hate speech dataset.
-- Dixon2018: Insights on overfitting in text classification models.
-- Kennedy2020: Importance of contextualizing hate speech classifiers.
+- Devlin, J., Chang, M.-W., Lee, K., and Toutanova, K. Bert: Pre-training of deep bidirectional transformers for language understanding. arXiv preprint arXiv:1810.04805, 2018.
+- Dixon, L., Li, J., Sorensen, J., Thain, N., and Vasserman, L. Measuring and mitigating unintended bias in text classification. In AAAI/ACM Conference on AI, Ethics, and Society, pp. 67–73, 2018.
+- Kennedy, B., Jin, X., Davani, A. M., Dehghani, M., and Ren, X. Contextualizing hate speech classifiers with post-hoc explanation. In Proceedings of the 58th Annual Meeting of the Association for Computational Linguistics, pp. 5435–5442, 2020.
+- Sharengaraju, U. Dynamically generated hate speech dataset. Kaggle, 2021. URL https://www.kaggle.com/datasets/usharengaraju/dynamically-generated-hate-speech-dataset/data.
+
