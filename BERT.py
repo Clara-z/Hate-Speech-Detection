@@ -29,22 +29,24 @@ def bert_encode(data, max_length=200):
 
 def create_bert_model():
     # Loading the pre-trained BERT model for sequence classification
-    model = TFBertForSequenceClassification.from_pretrained('bert-base-uncased')
-    # Initializing the optimizer with a specific learning rate
-    optimizer = tf.keras.optimizers.Adam(learning_rate=2e-5)
+    model = TFBertForSequenceClassification.from_pretrained('prajjwal1/bert-tiny', from_pt=True)    # Initializing the optimizer with a specific learning rate
     # Defining the loss function for a classification problem with logits
     loss = tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=3.334e-5)
     # Compiling the model with the optimizer, loss function, and metric to track
     model.compile(optimizer=optimizer, loss=loss, metrics=['accuracy'])
     return model
 
 # Loading training, development, and test data from numpy files
-train_data = np.load('data/hate_speech_train.npy', allow_pickle=True)
-dev_data = np.load('data/hate_speech_dev.npy', allow_pickle=True)
-test_data = np.load('data/hate_speech_test.npy', allow_pickle=True)
+train_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_train.npy', allow_pickle=True)
+# dev data is from hate_speech_dev.npy
+dev_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_dev.npy', allow_pickle=True)
+# test data is from hate_speech_test.npy
+test_data = np.load('/content/drive/MyDrive/CSCI467/data/hate_speech_test.npy', allow_pickle=True)
+
 
 # Initializing the BERT tokenizer
-tokenizer = BertTokenizer.from_pretrained('bert-base-uncased')
+tokenizer = BertTokenizer.from_pretrained('prajjwal1/bert-tiny')
 
 # Encoding the datasets using the bert_encode function
 train_inputs, train_masks = bert_encode(train_data[:, 1])
@@ -70,8 +72,8 @@ early_stopping = EarlyStopping(monitor='val_loss', patience=3, restore_best_weig
 bert_history = bert_model.fit(
     [train_inputs, train_masks], train_labels,
     validation_data=([dev_inputs, dev_masks], dev_labels),
-    epochs=3,
-    batch_size=32,
+    epochs=20,
+    batch_size=16,
     callbacks=[early_stopping]
 )
 
