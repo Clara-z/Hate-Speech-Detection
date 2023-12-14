@@ -75,7 +75,7 @@ Serving as a foundational comparison point, this model predicts the training dat
 This probabilistic model, based on Bayes’ theorem, is enhanced with TF-IDF vectorization and optimized through cross-validation and hyperparameter tuning, focusing on linguistic patterns in text classification.
 
 ### BERT
-BERT, with its deep learning architecture and contextual word understanding, represents a significant advancement in hate speech detection. We fine-tune BERT-tiny with a dense layer and optimize it using a Weights and Biases (WandB) system, ensuring robust performance in complex linguistic analysis.
+BERT, with its deep learning architecture and contextual word understanding, represents a significant advancement in hate speech detection. We fine-tune BERT-tiny (a smaller pre-trained BERT variant) with a dense layer and optimize it using a Weights and Biases (WandB) system, ensuring robust performance in complex linguistic analysis.
 
 ## Results and Comparative Analysis
 Our study reveals distinct performance variations among the Majority Classifier, Naive Bayes, and BERT models. BERT's superior performance highlights its advanced capabilities in contextual understanding, though it also encounters challenges with ambiguities and complex sentence structures.
